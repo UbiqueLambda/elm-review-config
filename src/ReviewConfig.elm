@@ -4,14 +4,22 @@ import Docs.NoMissing exposing (exposedModules, onlyExposed)
 import Docs.ReviewAtDocs
 import Docs.ReviewLinksAndSections
 import Docs.UpToDateReadmeLinks
+import NoBooleanCase
 import NoDebug.Log
 import NoDebug.TodoOrToString
-import NoExposingEverything
+import NoDeprecated
 import NoImportingEverything
+import NoLeftPizza
 import NoMissingTypeAnnotation
 import NoMissingTypeExpose
 import NoPrematureLetComputation
+import NoRedundantConcat
+import NoRedundantCons
 import NoSimpleLetBody
+import NoUnsortedCases
+import NoUnsortedLetDeclarations
+import NoUnsortedRecords
+import NoUnsortedTopLevelDeclarations
 import NoUnused.CustomTypeConstructorArgs
 import NoUnused.CustomTypeConstructors
 import NoUnused.Dependencies
@@ -33,16 +41,35 @@ config =
     , Docs.ReviewLinksAndSections.rule
     , Docs.ReviewAtDocs.rule
     , Docs.UpToDateReadmeLinks.rule
+    , NoBooleanCase.rule
     , NoDebug.Log.rule
     , NoDebug.TodoOrToString.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
-    , NoExposingEverything.rule
+    , NoDeprecated.rule NoDeprecated.defaults
     , NoImportingEverything.rule []
+    , NoLeftPizza.rule NoLeftPizza.Redundant
     , NoMissingTypeAnnotation.rule
-    , --NoMissingTypeAnnotationInLetIn.rule -- Let..In is a place for inference!
     , NoMissingTypeExpose.rule
     , NoSimpleLetBody.rule
     , NoPrematureLetComputation.rule
+    , NoRedundantConcat.rule
+    , NoRedundantCons.rule
+    , NoUnsortedCases.rule NoUnsortedCases.defaults
+    , NoUnsortedLetDeclarations.rule
+        (NoUnsortedLetDeclarations.sortLetDeclarations
+            |> NoUnsortedLetDeclarations.alphabetically
+        )
+    , NoUnsortedRecords.rule
+        (NoUnsortedRecords.defaults
+            |> NoUnsortedRecords.reportAmbiguousRecordsWithoutFix
+        )
+    , NoUnsortedTopLevelDeclarations.rule
+        (NoUnsortedTopLevelDeclarations.sortTopLevelDeclarations
+            |> NoUnsortedTopLevelDeclarations.typesFirst
+            |> NoUnsortedTopLevelDeclarations.portsFirst
+            |> NoUnsortedTopLevelDeclarations.exposedOrderWithPrivateLast
+            |> NoUnsortedTopLevelDeclarations.alphabetically
+        )
     , NoUnused.CustomTypeConstructors.rule []
     , NoUnused.CustomTypeConstructorArgs.rule -- TODO: Is this too strong for packages?
     , NoUnused.Dependencies.rule
