@@ -70,10 +70,7 @@ config =
             |> NoUnsortedTopLevelDeclarations.exposedOrderWithPrivateLast
             |> NoUnsortedTopLevelDeclarations.alphabetically
         )
-    , NoUnused.CustomTypeConstructors.rule []
-    , NoUnused.CustomTypeConstructorArgs.rule -- TODO: Is this too strong for packages?
     , NoUnused.Dependencies.rule
-    , NoUnused.Exports.rule
     , NoUnused.Modules.rule
     , NoUnused.Parameters.rule
     , NoUnused.Patterns.rule
